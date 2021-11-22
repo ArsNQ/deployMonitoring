@@ -1,0 +1,17 @@
+# Base role
+- name: Deploy Docker & NodeExporter on Cluster
+  hosts: Cluster
+  roles:
+    - deployNodeExporter
+
+# Base role
+- name: Deploy Cadvisor on Cluster
+  hosts: Cluster
+  roles:
+    - deployCadvisor
+
+# Docker role
+- name: Deploy Grafana & Monitoring on Infrastructure
+  hosts: GrafanaHost
+  roles:
+    - deployGrafana

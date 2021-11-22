@@ -1,0 +1,31 @@
+# A scrape configuration scraping a Node Exporter and the Prometheus server
+# itself.
+global:
+  scrape_interval: 10s
+  external_labels:
+    monitor: 'node'
+
+# Rules and alerts are read from the specified file(s)
+rule_files:
+  - /etc/prometheus/rules/alerts.yml
+
+# Alerting specifies settings related to the Alertmanager
+alerting:
+  alertmanagers:
+    - static_configs:
+      - targets: ['IP_ADDRESS:9093'] ## IP Address of the localhost
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['IP_ADDRESS:9090'] ## IP Address of the localhost
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['IP_ADDRESS:9100'] ## IP Address of the localhost
+      - targets: ['IP_ADDRESS:9100']
+      - targets: ['IP_ADDRESS:9100']
+  - job_name: cadvisor
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['IP_ADDRESS:8080']
+      - targets: ['IP_ADDRESS:8080']
+      - targets: ['IP_ADDRESS:8080']

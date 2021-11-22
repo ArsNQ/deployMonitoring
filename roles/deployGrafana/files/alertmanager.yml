@@ -1,0 +1,62 @@
+global:
+  resolve_timeout: 30s
+  smtp_require_tls: false
+
+route:
+  group_by: ['instance', 'severity']
+  group_wait: 10s
+  group_interval: 10m
+  repeat_interval: 5s
+  receiver: 'email-me'
+
+# Alerts
+  routes:
+  - match:
+     alertname: Too_much_load
+    receiver: email-me
+  - match:
+     alertname: PostgresqlDown
+    receiver: email-me
+  - match:
+     alertname: PostgresqlExporterError
+    receiver: email-me
+  - match:
+     alertname: PostgresqlTooManyConnections
+    receiver: email-me
+  - match:
+     alertname: PrometheusTargetMissing
+    receiver: email-me
+  - match:
+     alertname: ContainerKilled
+    receiver: email-me
+  - match:
+     alertname: HostOutOfMemory
+    receiver: email-me
+  - match:
+     alertname: HostHighCpuLoad
+    receiver: email-me
+  - match:
+     alertname: TraefikServiceDown
+    receiver: email-me
+  - match:
+     alertname: HostUnusualNetworkThroughputIn
+    receiver: email-me
+  - match:
+     alertname: HostUnusualDiskReadRate
+    receiver: email-me
+  - match:
+     alertname: HostUnusualDiskWriteRate
+    receiver: email-me
+  - match:
+     alertname: HostOutOfDiskSpace
+    receiver: email-me
+
+receivers:
+  - name: email-me
+    email_configs:
+    - to: "mailaddress"
+      from: "username/mailaddress"
+      smarthost: "smtp.gmail.com:465"
+      auth_username: "username/mailaddress"
+      auth_identity: "username/mailaddress"
+      auth_password: "password"

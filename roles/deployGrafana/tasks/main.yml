@@ -1,0 +1,84 @@
+---
+# tasks file for docker - Prometheus installation
+- name: Directory creation.
+  file:
+    path: /etc/prometheus
+    state: directory
+    recurse: yes
+
+- name: Copying the Prometheus file.
+  copy:
+    src: prometheus.yml
+    dest: /etc/prometheus/
+
+- name: Directory creation.
+  file:
+    path: /data/prometheus
+    state: directory
+    recurse: yes
+
+# Alertmanager
+- name: Directory creation.
+  file:
+    path: /etc/prometheus/rules
+    state: directory
+    recurse: yes
+
+- name: Copying the alertmanager file.
+  copy:
+    src: alerts.yml
+    dest: /etc/prometheus/rules/
+
+# Prometheus
+- name: Directory creation.
+  file:
+    path: /etc/alertmanager/
+    state: directory
+    recurse: yes
+
+- name: Copying the rules file.
+  copy:
+    src: alertmanager.yml
+    dest: /etc/alertmanager/
+
+# Grafana
+# Datasource
+- name: Directory creation.
+  file:
+    path: /grafana/provisioning/datasources/
+    state: directory
+    recurse: yes
+
+- name: Copying the datasource file.
+  copy:
+    src: provisioning/datasource.yml
+    dest: /grafana/provisioning/datasources/
+
+# Dashboard
+- name: Directory creation.
+  file:
+    path: /grafana/provisioning/dashboards/
+    state: directory
+    recurse: yes
+
+- name: Copying the dashboard file.
+  copy:
+    src: provisioning/dashboards/
+    dest: /grafana/provisioning/dashboards/
+
+# Config Monitoring
+- name: Copying the dashboard file.
+  copy:
+    src: provisioning/config.monitoring
+    dest: /tmp/grafana/
+
+# Docker-compose
+- name: Copying the Docker-Compose file.
+  copy:
+    src: docker-compose.yml
+    dest: /tmp/
+
+- name: docker build repos
+  command: docker-compose up --force-recreate -d
+  args:
+    chdir: /tmp/

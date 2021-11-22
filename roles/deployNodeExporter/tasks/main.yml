@@ -1,0 +1,37 @@
+---
+# tasks file for Node Exporter
+- name: install dependencies
+  apt:
+    name: "{{item}}"
+    state: present
+  loop:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg-agent
+      - software-properties-common
+
+- name: install docker
+  apt:
+    name: "{{item}}"
+  loop:
+    - docker
+    - docker-compose
+    - docker.io
+
+- name: Copying the Docker-Compose file.
+  copy:
+    src: docker-compose.yml
+    dest: /etc/
+
+- name: Adding file permissions.
+  file:
+    path: /etc/docker-compose.yml
+    state: file
+    mode: 755
+
+# Docker Build
+- name: docker build repos
+  command: docker-compose up --force-recreate -d
+  args:
+    chdir: /etc/

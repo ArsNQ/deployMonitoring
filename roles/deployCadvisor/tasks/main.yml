@@ -1,0 +1,18 @@
+---
+# tasks file for deployCadvisor
+- name: Copying the Docker-Compose file.
+  copy:
+    src: docker-compose.yml
+    dest: /etc/
+
+- name: Adding file permissions.
+  file:
+    path: /etc/docker-compose.yml
+    state: file
+    mode: 755
+
+# Docker Build
+- name: docker build repos
+  command: docker-compose up --force-recreate -d
+  args:
+    chdir: /etc/
